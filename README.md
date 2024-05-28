@@ -22,8 +22,8 @@ The Temperature Monitor is a C program for Raspberry Pi 5 and 4B that monitors a
 Clone the repository and compile the source code:
 
 ```bash
-git clone https://github.com/Xza85hrf/temperature-monitor.git
-cd temperature-monitor
+git clone https://github.com/Xza85hrf/Raspberry_Pi_Temperature_Monitor.git
+cd Raspberry_Pi_Temperature_Monitor
 gcc -o enhanced_temperature_monitor enhanced_temperature_monitor.c
 And run it with:
 ./enhanced_temperature_monitor
@@ -42,7 +42,7 @@ Modify the following parameters according to your needs within the program:
 Run the program from the command line:
 
 ```bash
-./temperature_monitor [-t threshold] [-l log_file] [-i poll_interval] [-d]
+./enhanced_temperature_monitor [-t threshold] [-l log_file] [-i poll_interval] [-d]
 ```
 
 ### Options
