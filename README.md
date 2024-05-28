@@ -24,7 +24,9 @@ Clone the repository and compile the source code:
 ```bash
 git clone https://github.com/Xza85hrf/temperature-monitor.git
 cd temperature-monitor
-gcc -o temperature_monitor enhanced_temperature_monitor.c temperature_monitor.c -lm
+gcc -o enhanced_temperature_monitor enhanced_temperature_monitor.c
+And run it with:
+./enhanced_temperature_monitor
 ```
 
 ## Configuration
