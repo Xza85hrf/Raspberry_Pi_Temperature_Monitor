@@ -1,10 +1,6 @@
 # Raspberry_Pi_Temperature_Monitor
 The Temperature Monitor is a C program for Raspberry Pi 5 and 4B that monitors and logs system temperature in real-time. It features threshold-based logging, automatic log rotation, and daemon mode for background processing. The program provides visual feedback with color-coded terminal output and is easy to configure and use.
 
-# Temperature Monitor
-
-The Temperature Monitor is a C program designed to monitor and log the temperature of your system, primarily intended for use with Raspberry Pi 5 and 4B where temperature monitoring is crucial for maintaining optimal performance. The program provides real-time temperature readings, logs temperatures that exceed a user-defined threshold, and rotates log files to prevent excessive disk usage.
-
 ## Features
 
 - Real-time temperature monitoring with visual feedback.
@@ -26,7 +22,7 @@ The Temperature Monitor is a C program designed to monitor and log the temperatu
 Clone the repository and compile the source code:
 
 ```bash
-git clone https://github.com/yourusername/temperature-monitor.git
+git clone https://github.com/Xza85hrf/temperature-monitor.git
 cd temperature-monitor
 gcc -o temperature_monitor enhanced_temperature_monitor.c temperature_monitor.c -lm
 ```
