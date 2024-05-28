@@ -8,12 +8,13 @@
 #include <sys/stat.h>
 #include "temperature_monitor.h"
 
-#define LOG_SIZE_LIMIT 1048576  // 1 MB
-#define MAX_SMOOTHING_SAMPLES 5
+#define LOG_SIZE_LIMIT 1048576  // 1 MB limit for log file before rotation
+#define MAX_SMOOTHING_SAMPLES 5 // Number of samples for moving average
 
 double temperature_samples[MAX_SMOOTHING_SAMPLES] = {0};
 int sample_index = 0;
 
+// Function to log the temperature if it exceeds 65°C
 void log_temperature(double temperature, const char* log_file) {
     if (temperature <= 65.0) {
         return;
@@ -29,6 +30,7 @@ void log_temperature(double temperature, const char* log_file) {
     time_t now = time(NULL);
     struct tm *local_time = localtime(&now);
 
+    // Color coding the log entries based on temperature ranges
     if (temperature <= 40.0) {
         fprintf(file, "\033[0;32m"); // Green for 0-40°C
     } else if (temperature <= 65.0) {
@@ -39,6 +41,7 @@ void log_temperature(double temperature, const char* log_file) {
         fprintf(file, "\033[0;31m"); // Red for above 75°C
     }
 
+    // Logging the temperature with timestamp
     fprintf(file, "[%04d-%02d-%02d %02d:%02d:%02d] Temperature: %.2f°C\033[0m\n",
             local_time->tm_year + 1900, local_time->tm_mon + 1, local_time->tm_mday,
             local_time->tm_hour, local_time->tm_min, local_time->tm_sec, temperature);
@@ -46,13 +49,15 @@ void log_temperature(double temperature, const char* log_file) {
     fclose(file);
 }
 
+// Function to check if the temperature exceeds the threshold and notify
 void check_temperature(double temperature, double threshold) {
     if (temperature > threshold) {
         printf("\033[0;31mTemperature above threshold! Current temperature: %.2f°C\033[0m\n", temperature);
-        // Code to send alert (e.g., email, SMS, system notification)
+        // Code to send alert (e.g., email, SMS, system notification) can be added here
     }
 }
 
+// Function to read the current temperature using the vcgencmd command
 double read_temperature() {
     FILE *fp = popen("/usr/bin/vcgencmd measure_temp", "r");
     if (fp == NULL) {
@@ -70,6 +75,7 @@ double read_temperature() {
     return temperature;
 }
 
+// Function to daemonize the process
 void daemonize() {
     pid_t pid, sid;
     pid = fork();
@@ -92,6 +98,7 @@ void daemonize() {
     close(STDERR_FILENO);
 }
 
+// Function to rotate the log file if it exceeds the size limit
 void rotate_log(const char* log_file) {
     struct stat st;
     if (stat(log_file, &st) == 0 && st.st_size >= LOG_SIZE_LIMIT) {
@@ -101,6 +108,7 @@ void rotate_log(const char* log_file) {
     }
 }
 
+// Function to calculate a moving average of the temperature to smooth out rapid changes
 double moving_average(double new_temp) {
     temperature_samples[sample_index % MAX_SMOOTHING_SAMPLES] = new_temp;
     sample_index++;
@@ -112,11 +120,13 @@ double moving_average(double new_temp) {
     return sum / count;
 }
 
+// Signal handler for graceful termination
 void handle_signal(int signal) {
     printf("Terminating...\n");
     exit(0);
 }
 
+// Main function to handle program execution
 int main(int argc, char* argv[]) {
     const char* log_file = "temperature_log.txt";
     double threshold = 80.0;
@@ -124,6 +134,7 @@ int main(int argc, char* argv[]) {
     int run_as_daemon = 0;
 
     int opt;
+    // Parsing command line arguments
     while ((opt = getopt(argc, argv, "t:l:i:d")) != -1) {
         switch (opt) {
             case 't':
